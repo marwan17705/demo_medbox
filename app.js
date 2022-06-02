@@ -61,4 +61,4 @@ app.use("/api/v1/users",
     );    
 
 
-app.listen(8086, () => console.log('Server started'));
+app.listen(40001, () => console.log('Server started'));

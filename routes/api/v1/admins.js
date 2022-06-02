@@ -85,7 +85,7 @@ router.put("/medboxs/readytosend/:box_sn",async (req, res) => {
 
  */
 
-router.post("/medboxs/verify",async (req, res) => {
+router.post("/medboxs/verify_otp",async (req, res) => {
   // var box_sn = req.params.box_sn
   var data = req.body
 
@@ -114,9 +114,14 @@ router.post("/medboxs/verify",async (req, res) => {
     token:"token"
   });
   // await res.send('test')
-  http_status.info_200_insert.info = "success, data is inserted successfully"
-  await res.json(http_status.info_200_insert)
-  // await res.json(req);
+  if(info.length>0)
+  {
+    http_status.info_200_insert.info = "success, data is inserted successfully"
+    await res.json(http_status.info_200_insert)
+  }
+  else
+    await res.json(http_status.info_200_not_found);
+
 });
  
 module.exports = router;
