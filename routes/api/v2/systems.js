@@ -75,7 +75,7 @@ router.get("/orders",async (req, res) => {
   }
   catch(err)
   {
-    console.log(err);
+    console.log(req.url);console.log(err);;
   }
 
 

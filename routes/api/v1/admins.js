@@ -38,7 +38,8 @@ router.post("/medboxs/open/:box_sn",async (req, res) => {
   }
   catch(err)
   {
-    console.log(err);
+
+    console.log(req.url);console.log(err);
   }
 });
 
@@ -92,7 +93,7 @@ router.put("/medboxs/readytosend/:box_sn",async (req, res) => {
   }
   catch(err)
   {
-    console.log(err);
+    console.log(req.url);console.log(err);
   }
   //Send confirm hook event to One Express
 });
@@ -148,7 +149,7 @@ router.post("/medboxs/verify_otp",async (req, res) => {
   }
   catch(err)
   {
-    console.log(err);
+    console.log(req.url);console.log(err);
   }
 });
  

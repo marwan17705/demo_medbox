@@ -46,7 +46,7 @@ router.post("/receiver/registrations",async (req, res) => {
     await res.json(http_status.info_200_insert)
   }catch(err)
   {
-    console.log(err)
+    console.log(req.url);console.log(err);
   }
 
 

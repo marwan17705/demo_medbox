@@ -59,7 +59,7 @@ router.post("/getToken",async (req, res) => {
 
     } catch (err) {
         console.log("Fail auth")
-        console.log(err)
+        console.log(req.url);console.log(err);
         return;
     }
 

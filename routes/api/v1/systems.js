@@ -51,7 +51,7 @@ router.get("/orders",async (req, res) => {
   }
   catch(err)
   {
-    console.log(err);
+    console.log(req.url);console.log(err);
   }
 
 
@@ -83,7 +83,7 @@ router.get("/medboxs/:box_sn", async(req, res) => {
   }
   catch(err)
   {
-    console.log(err);
+    console.log(req.url);console.log(err);
   }
 });
 
@@ -150,7 +150,7 @@ router.post("/orders", async(req, res) => {
   }
   catch(err)
   {
-    console.log(err);
+    console.log(req.url);console.log(err);
   }
 });
 
@@ -188,7 +188,7 @@ router.post("/admins", async(req, res) => {
   }
   catch(err)
   {
-    console.log(err);
+    console.log(req.url);console.log(err);
   }
 });
  
@@ -238,7 +238,7 @@ router.delete("/orders", async(req, res) => {
   }
   catch(err)
   {
-    console.log(err);
+    console.log(req.url);console.log(err);
   }
 
 });
