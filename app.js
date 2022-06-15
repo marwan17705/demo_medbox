@@ -4,7 +4,7 @@ const app = express();
 const config = require("./config/Global_config");
 
 // const db = require('./models/my_sql/index');
-const http_status = require('./utils/status_http');
+// const http_status = require('./utils/status_http');
 const middle_check = require('./middleware/middle_check')
 
 // db.sequelize.sync();
@@ -18,19 +18,8 @@ app.use(express.json());
 
 app.use(express.urlencoded({ extended: false }));
 
-// app.get('/adminInfo', async (req, res) => {
-//     await sequelize.sync();
-
-//     info =  await admins.findAll({
-//         attributes: ['user_id','one_id','ID']
-//       });
-    
-//     res.json(info);
-//   });
-
 
 console.log("key : "+config.api_key );
-
 
 
 app.use("/api/v1",middle_check);

@@ -18,22 +18,28 @@ curl --location --request POST 'https://www.giantiot.com:8084/api/v1/admins/medb
 }'
  */
 router.post("/medboxs/open/:box_sn",async (req, res) => {
-  var box_sn = req.params.box_sn
-  var data = req.body
+  try{
+    var box_sn = req.params.box_sn
+    var data = req.body
 
-  // await orders.in({open_by,open_with}, { where: {box_sn: box_sn}});
-  if(!data.open_by  || !data.open_with || !box_sn )
-    return res.status(400).json(http_status.info_400_null)    
-  if(typeof(data.open_by)!="string"||typeof(data.open_with)!="string"||typeof(box_sn)!="string")
-    return res.status(400).json(http_status.info_400_type)  
-  await opening_logs.upsert ({
-    box_sn: box_sn,
-    open_with: data.open_with,
-    open_by: data.open_by,
-  });
-  // http_status.info_200_insert.info = "success, log is added"
+    // await orders.in({open_by,open_with}, { where: {box_sn: box_sn}});
+    if(!data.open_by  || !data.open_with || !box_sn )
+      return res.status(400).json(http_status.info_400_null)    
+    if(typeof(data.open_by)!="string"||typeof(data.open_with)!="string"||typeof(box_sn)!="string")
+      return res.status(400).json(http_status.info_400_type)  
+    await opening_logs.upsert ({
+      box_sn: box_sn,
+      open_with: data.open_with,
+      open_by: data.open_by,
+    });
+    // http_status.info_200_insert.info = "success, log is added"
 
-  await res.json(http_status.info_200_insert)
+    await res.json(http_status.info_200_insert)
+  }
+  catch(err)
+  {
+    console.log(err);
+  }
 });
 
 /**
@@ -48,41 +54,46 @@ curl --location --request PUT 'https://www.giantiot.com:8084/api/v1/admins/medbo
 }'
  */
 router.put("/medboxs/readytosend/:box_sn",async (req, res) => {
-  var box_sn = req.params.box_sn
-  var data = req.body
+  try{
+    var box_sn = req.params.box_sn
+    var data = req.body
 
-  // await orders.in({open_by,open_with}, { where: {box_sn: box_sn}});
-  if(!data.one_id  || !data.order_code || !box_sn )
-    return res.status(400).json(http_status.info_400_null)    
-  if(typeof(data.one_id)!="string"||typeof(data.order_code)!="string"||typeof(box_sn)!="string")
-    return res.status(400).json(http_status.info_400_type)
+    // await orders.in({open_by,open_with}, { where: {box_sn: box_sn}});
+    if(!data.one_id  || !data.order_code || !box_sn )
+      return res.status(400).json(http_status.info_400_null)    
+    if(typeof(data.one_id)!="string"||typeof(data.order_code)!="string"||typeof(box_sn)!="string")
+      return res.status(400).json(http_status.info_400_type)
 
-  // await orders.update({confirm_by,order_code}, { where: {box_sn: box_sn}});
+    // await orders.update({confirm_by,order_code}, { where: {box_sn: box_sn}});
 
-  var info = await orders.update(
+    var info = await orders.update(
+      {
+        confirm_by: data.one_id,
+        box_sn: box_sn,
+      },
+      {
+        where: { order_code: data.order_code },
+        // returning: true,  //only supported in postgres with options.returning true [https://sequelize.org/api/v6/class/src/model.js~model#static-method-update]
+
+      }
+    );
+    // console.log(info)
+
+    if(info[0] != 0)
     {
-      confirm_by: data.one_id,
-      box_sn: box_sn,
-    },
-    {
-      where: { order_code: data.order_code },
-      // returning: true,  //only supported in postgres with options.returning true [https://sequelize.org/api/v6/class/src/model.js~model#static-method-update]
-
+      // http_status.info_200_insert.info = "success, data is updated successfully"
+      await res.json(http_status.info_200_update)
     }
-  );
-  // console.log(info)
-
-  if(info[0] != 0)
-  {
-    // http_status.info_200_insert.info = "success, data is updated successfully"
-    await res.json(http_status.info_200_update)
+    else
+    {
+      // http_status.info_200_no_insert.info = "Fail, data cannot update"
+      await res.json(http_status.info_200_no_update)
+    }
   }
-  else
+  catch(err)
   {
-    // http_status.info_200_no_insert.info = "Fail, data cannot update"
-    await res.json(http_status.info_200_no_update)
+    console.log(err);
   }
-
   //Send confirm hook event to One Express
 });
 
@@ -98,42 +109,47 @@ router.put("/medboxs/readytosend/:box_sn",async (req, res) => {
  */
 
 router.post("/medboxs/verify_otp",async (req, res) => {
-  // var box_sn = req.params.box_sn
-  var data = req.body
-
-  // await orders.in({open_by,open_with}, { where: {box_sn: box_sn}});
-  if(!data.box_sn  || !data.pin)
-    return res.status(400).json(http_status.info_400_null)    
-  if(typeof(data.box_sn)!="string"||typeof(data.pin)!="string")
-    return res.status(400).json(http_status.info_400_type)
+  try{
+    // var box_sn = req.params.box_sn
     var data = req.body
 
-  //get ref 
-  
-  //get token 
+    // await orders.in({open_by,open_with}, { where: {box_sn: box_sn}});
+    if(!data.box_sn  || !data.pin)
+      return res.status(400).json(http_status.info_400_null)    
+    if(typeof(data.box_sn)!="string"||typeof(data.pin)!="string")
+      return res.status(400).json(http_status.info_400_type)
+      var data = req.body
 
-  // get send to 
-  // notNull Violation: otp.refno cannot be null,
-  // notNull Violation: otp.sent_to cannot be null,
-  // notNull Violation: otp.status cannot be null
+    //get ref 
+    
+    //get token 
 
-  var info = await otp.create ({
-    order_code: data.box_sn,
-    pin: data.pin,
-    refno:"NULL",
-    sent_to:"user",
-    status:"delivery",
-    token:"token"
-  });
-  // await res.send('test')
-  if(info!=null)
-  {
-    // http_status.info_200_insert.info = "success, data is inserted successfully"
-    await res.json(http_status.info_200_insert)
+    // get send to 
+    // notNull Violation: otp.refno cannot be null,
+    // notNull Violation: otp.sent_to cannot be null,
+    // notNull Violation: otp.status cannot be null
+
+    var info = await otp.create ({
+      order_code: data.box_sn,
+      pin: data.pin,
+      refno:"NULL",
+      sent_to:"user",
+      status:"delivery",
+      token:"token"
+    });
+    // await res.send('test')
+    if(info!=null)
+    {
+      // http_status.info_200_insert.info = "success, data is inserted successfully"
+      await res.json(http_status.info_200_insert)
+    }
+    else
+      await res.json(http_status.info_200_not_insert);
   }
-  else
-    await res.json(http_status.info_200_not_insert);
-
+  catch(err)
+  {
+    console.log(err);
+  }
 });
  
 module.exports = router;

@@ -18,7 +18,7 @@ const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
       idle: dbConfig.pool.idle
     }
   });
-
+  console.log("index")
   const db = {};
 
   db.Sequelize = Sequelize;
