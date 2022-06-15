@@ -60,17 +60,16 @@ router.get("/orders",async (req, res) => {
       required: true,
       attributes: ['fname_th','lname_th'] ,
       // where: {fname_th: q_str  },
-      // as: 'users_inc'
      },],
      where:  condition
   });
   if(info.length>0)
   {
-    http_status.info_200_found.info = info;
-    await res.json(http_status.info_200_found);
+    // http_status.info_200_found.info = info;
+    await res.json(http_status.info_200_update);
   }
   else
-    await res.json(http_status.info_200_not_found);
+    await res.json(http_status.info_200_no_update);
 
 });
 

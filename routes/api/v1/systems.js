@@ -104,14 +104,13 @@ router.post("/orders", async(req, res) => {
                   phone_num: data.userPhoneNumber,
                 }
               });
-
-              
+  console.log(query.length)
   if(query.length)
   {
 //ถ้า มี   inser t order ไปยัง order 
 //system -> phone ,order
     // hid user_phone_num created_by status confirm_by order_code
-    http_status.info_200_insert.info = "updata order"
+    var res_http = http_status.info_200_update
   }
   else
   {
@@ -122,7 +121,7 @@ router.post("/orders", async(req, res) => {
       phone_num: data.userPhoneNumber,
       created_by: "one_id",
     });
-    http_status.info_200_insert.info = "updata user & order"
+    var res_http = http_status.info_200_insert
 
   }
     // ดึง hid จากโรงบาล
@@ -136,7 +135,7 @@ router.post("/orders", async(req, res) => {
     status: "wait",
     confirm_by: "one_id",
   });
-  await res.json(http_status.info_200_insert)
+  await res.json(res_http)
 
 });
 
@@ -205,10 +204,16 @@ router.delete("/orders", async(req, res) => {
   });
   // console.log(info)
   if(info)
+  {
     http_status.info_200_delete.info ="order "+ data.order_code + " is rejected";
+    await res.json(http_status.info_200_delete)  
+
+  }
   else
-    http_status.info_200_delete.info ="order "+ data.order_code + " isn't found";
-  await res.json(http_status.info_200_delete)  
+  {
+    http_status.info_200_not_found.info ="order "+ data.order_code + " isn't found";
+    await res.json(http_status.info_200_not_found)  
+  }
 
 
 });

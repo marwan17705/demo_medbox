@@ -37,7 +37,7 @@ router.put("/send_otp",async (req, res) => {
     }
   );
   // await res.send('test')
-  http_status.info_200_insert.info = "success, data is updated successfully"
+  // http_status.info_200_insert.info = "success, data is updated successfully"
   await res.json(http_status.info_200_insert)
 });
 

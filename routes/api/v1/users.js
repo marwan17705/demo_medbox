@@ -39,7 +39,7 @@ router.post("/receiver/registrations",async (req, res) => {
   });
 
   // var info = await users.findAll({})
-  http_status.info_200_insert.info = data //data.userName;
+  // http_status.info_200_insert.info = data //data.userName;
 
   // console.log(data)
   await res.json(http_status.info_200_insert)

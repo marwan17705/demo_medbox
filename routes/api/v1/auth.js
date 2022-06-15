@@ -28,11 +28,10 @@ router.post("/getToken",async (req, res) => {
         attributes:['id','expired_min','role','secret'],
         where:  condition
     });
-    console.log(info)
+    // console.log(info)
     if(info==null)
       return await res.json(http_status.info_403);
   
-
     var payload =
     {
         "ID": info.id,
@@ -45,7 +44,7 @@ router.post("/getToken",async (req, res) => {
     // console.log(secret)
     // console.log(token)
     // console.log(jwt_token.isValid(token,info.secret));
-    http_status.info_200_found.info = token;
+    http_status.info_200_found.token = token;
 
     return await res.json(http_status.info_200_found);
 

@@ -31,7 +31,7 @@ router.post("/medboxs/open/:box_sn",async (req, res) => {
     open_with: data.open_with,
     open_by: data.open_by,
   });
-  http_status.info_200_insert.info = "success, log is added"
+  // http_status.info_200_insert.info = "success, log is added"
 
   await res.json(http_status.info_200_insert)
 });
@@ -58,18 +58,30 @@ router.put("/medboxs/readytosend/:box_sn",async (req, res) => {
     return res.status(400).json(http_status.info_400_type)
 
   // await orders.update({confirm_by,order_code}, { where: {box_sn: box_sn}});
-  await orders.update(
+
+  var info = await orders.update(
     {
       confirm_by: data.one_id,
       box_sn: box_sn,
     },
     {
       where: { order_code: data.order_code },
+      // returning: true,  //only supported in postgres with options.returning true [https://sequelize.org/api/v6/class/src/model.js~model#static-method-update]
+
     }
   );
-  // await res.send('test')
-  http_status.info_200_insert.info = "success, data is updated successfully"
-  await res.json(http_status.info_200_insert)
+  // console.log(info)
+
+  if(info[0] != 0)
+  {
+    // http_status.info_200_insert.info = "success, data is updated successfully"
+    await res.json(http_status.info_200_update)
+  }
+  else
+  {
+    // http_status.info_200_no_insert.info = "Fail, data cannot update"
+    await res.json(http_status.info_200_no_update)
+  }
 
   //Send confirm hook event to One Express
 });
@@ -116,11 +128,11 @@ router.post("/medboxs/verify_otp",async (req, res) => {
   // await res.send('test')
   if(info!=null)
   {
-    http_status.info_200_insert.info = "success, data is inserted successfully"
+    // http_status.info_200_insert.info = "success, data is inserted successfully"
     await res.json(http_status.info_200_insert)
   }
   else
-    await res.json(http_status.info_200_not_found);
+    await res.json(http_status.info_200_not_insert);
 
 });
  
